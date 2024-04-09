@@ -1,4 +1,4 @@
-730e9c9c5f9b5a6000a65f27d8cc7ebf *DESCRIPTION
+5e94ee4e068a4765bb6fc5b5ed15533d *DESCRIPTION
 386fd396539112ee358af8d2f439bf3a *NAMESPACE
 8d857476881108500e9dfdcc43e74e5e *NEWS.md
 d706b0b01ca9dd7c1c0a475444efa196 *R/PipeOpFDAExtract.R
@@ -40,7 +40,7 @@ ab134026b9b2bfc5f5e5c18e4a3a7ac3 *tests/testthat/test_PipeOpFDAExtract.R
 913bcc73ddb0e1c320b30089f8d70ad2 *tests/testthat/test_PipeOpFDAFlatten.R
 e8b68c2e008affd0ede48cf416479f5a *tests/testthat/test_PipeOpFDAInterpolate.R
 7ad5b0f63978ffde582a693e80e90733 *tests/testthat/test_PipeOpFDASmooth.R
-215f84d0242f8d47fbf512e85682b7e6 *tests/testthat/test_PipeOpFPCA.R
+164cbb1e46b172efeda3152b7bbc93af *tests/testthat/test_PipeOpFPCA.R
 d2cf2741adf50e856fc9e53e212dbc43 *tests/testthat/test_TaskRegr_dti.R
 bd617d707bc589a194445ca310efe027 *tests/testthat/test_TaskRegr_fuel.R
 170da47d86a4fccc1037e105d1fd83bd *tests/testthat/test_hash_input.R

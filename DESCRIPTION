@@ -1,6 +1,6 @@
 Package: mlr3fda
 Title: Extending 'mlr3' to Functional Data Analysis
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: c(
     person("Sebastian", "Fischer", , "sebf.fischer@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-9609-3197")),
@@ -34,11 +34,11 @@ Collate: 'zzz.R' 'PipeOpFDAExtract.R' 'PipeOpFDAFlatten.R'
         'TaskClassif_phoneme.R' 'TaskRegr_dti.R' 'TaskRegr_fuel.R'
         'bibentries.R' 'datasets.R' 'hash_input.R'
 NeedsCompilation: no
-Packaged: 2024-04-04 07:55:52 UTC; sebi
+Packaged: 2024-04-09 07:32:48 UTC; sebi
 Author: Sebastian Fischer [aut, cre] (<https://orcid.org/0000-0002-9609-3197>),
   Maximilian Muecke [aut] (<https://orcid.org/0009-0000-9432-9795>),
   Fabian Scheipl [ctb] (<https://orcid.org/0000-0001-8172-3603>),
   Bernd Bischl [ctb] (<https://orcid.org/0000-0001-6002-6980>)
 Maintainer: Sebastian Fischer <sebf.fischer@gmail.com>
 Repository: CRAN
-Date/Publication: 2024-04-04 17:22:59 UTC
+Date/Publication: 2024-04-09 11:40:02 UTC
