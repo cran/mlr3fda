@@ -1,6 +1,6 @@
 Package: mlr3fda
 Title: Extending 'mlr3' to Functional Data Analysis
-Version: 0.1.1
+Version: 0.1.2
 Authors@R: c(
     person("Sebastian", "Fischer", , "sebf.fischer@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-9609-3197")),
@@ -23,7 +23,7 @@ URL: https://mlr3fda.mlr-org.com, https://github.com/mlr-org/mlr3fda
 BugReports: https://github.com/mlr-org/mlr3fda/issues
 Depends: mlr3 (>= 0.14.0), R (>= 3.1.0)
 Imports: checkmate, data.table, lgr, mlr3misc (>= 0.14.0),
-        mlr3pipelines, paradox, R6, tf
+        mlr3pipelines (>= 0.5.2), paradox, R6, tf (>= 0.3.4)
 Suggests: rpart, testthat (>= 3.0.0), zoo
 Config/testthat/edition: 3
 Encoding: UTF-8
@@ -34,11 +34,11 @@ Collate: 'zzz.R' 'PipeOpFDAExtract.R' 'PipeOpFDAFlatten.R'
         'TaskClassif_phoneme.R' 'TaskRegr_dti.R' 'TaskRegr_fuel.R'
         'bibentries.R' 'datasets.R' 'hash_input.R'
 NeedsCompilation: no
-Packaged: 2024-04-09 07:32:48 UTC; sebi
+Packaged: 2024-05-30 05:49:02 UTC; sebi
 Author: Sebastian Fischer [aut, cre] (<https://orcid.org/0000-0002-9609-3197>),
   Maximilian Muecke [aut] (<https://orcid.org/0009-0000-9432-9795>),
   Fabian Scheipl [ctb] (<https://orcid.org/0000-0001-8172-3603>),
   Bernd Bischl [ctb] (<https://orcid.org/0000-0001-6002-6980>)
 Maintainer: Sebastian Fischer <sebf.fischer@gmail.com>
 Repository: CRAN
-Date/Publication: 2024-04-09 11:40:02 UTC
+Date/Publication: 2024-05-30 06:00:02 UTC
