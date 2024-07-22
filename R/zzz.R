@@ -11,7 +11,7 @@
 #' @section Data types:
 #' To extend mlr3 to functional data, two data types from the tf package are added:
 #' * `tfd_irreg` - Irregular functional data, i.e. the functions are observed for
-#'   potentiall different inputs for each observation.
+#'   potentially different inputs for each observation.
 #' * `tfd_reg` - Regular functional data, i.e. the functions are observed for the same input
 #'   for each individual.
 #'
@@ -68,8 +68,8 @@ register_mlr3pipelines = function() {
   if (Sys.getenv("IN_PKGDOWN") == "true") {
     lg$set_threshold("warn")
   }
-  mlr3misc::register_namespace_callback(pkgname, "mlr3", register_mlr3)
-  mlr3misc::register_namespace_callback(pkgname, "mlr3pipelines", register_mlr3pipelines)
+  register_namespace_callback(pkgname, "mlr3", register_mlr3)
+  register_namespace_callback(pkgname, "mlr3pipelines", register_mlr3pipelines)
 }
 
 .onUnload = function(libPaths) { # nolint

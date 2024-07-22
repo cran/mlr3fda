@@ -1,8 +1,11 @@
+test_that("PipeOpFDASmooth - basic properties", {
+  pop = po("fda.smooth")
+  expect_pipeop(pop)
+  expect_identical(pop$id, "fda.smooth")
+})
+
 test_that("PipeOpFDASmooth", {
   po_smooth = po("fda.smooth")
-  expect_pipeop(po_smooth)
-  expect_equal(po_smooth$id, "fda.smooth")
-
   # regular
   task1 = tsk("fuel")
   task1$col_roles$feature = "NIR"
@@ -17,7 +20,7 @@ test_that("PipeOpFDASmooth", {
     observed_train = po_smooth$train(list(task2))[[1L]]$data(cols = "cca")[[1L]]
     observed_predict = po_smooth$predict(list(task2))[[1L]]$data(cols = "cca")[[1L]]
 
-    expected  = suppressMessages(invoke(tf::tf_smooth, x = x, method = method, .args = args))
+    expected = suppressMessages(invoke(tf::tf_smooth, x = x, method = method, .args = args))
 
     expect_equal(observed_train, expected)
     expect_equal(observed_predict, expected)
@@ -30,7 +33,7 @@ test_that("PipeOpFDASmooth", {
     observed_train = po_smooth$train(list(task1))[[1L]]$data(cols = "NIR")[[1L]]
     observed_predict = po_smooth$predict(list(task1))[[1L]]$data(cols = "NIR")[[1L]]
 
-    expected  = suppressMessages(invoke(tf::tf_smooth, x = x, method = method, .args = args))
+    expected = suppressMessages(invoke(tf::tf_smooth, x = x, method = method, .args = args))
 
     expect_equal(observed_train, expected)
     expect_equal(observed_predict, expected)

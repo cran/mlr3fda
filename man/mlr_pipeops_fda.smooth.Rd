@@ -11,16 +11,16 @@ x-values, but rather smooths the observed values.
 }
 \section{Parameters}{
 
-The parameters are the parameters inherited from \code{\link{PipeOpTaskPreprocSimple}}, as well as the following
-parameters:
+The parameters are the parameters inherited from \code{\link[mlr3pipelines:PipeOpTaskPreprocSimple]{PipeOpTaskPreprocSimple}},
+as well as the following parameters:
 \itemize{
 \item \code{method} :: \code{character(1)}\cr
 One of:
 \itemize{
-\item "lowess": locally weighted scatterplot smoothing (default)
-\item "rollmean": rolling mean
-\item "rollmedian": rolling meadian
-\item "savgol":  Savitzky-Golay filtering
+\item \code{"lowess"}: locally weighted scatterplot smoothing (default)
+\item \code{"rollmean"}: rolling mean
+\item \code{"rollmedian"}: rolling meadian
+\item \code{"savgol"}:  Savitzky-Golay filtering
 }
 
 All methods but "lowess" ignore non-equidistant arg values.
@@ -34,8 +34,6 @@ Is initialized to \code{FALSE}.
 }
 
 \examples{
-library(mlr3pipelines)
-
 task = tsk("fuel")
 po_smooth = po("fda.smooth", method = "rollmean", args = list(k = 5))
 task_smooth = po_smooth$train(list(task))[[1L]]

@@ -11,10 +11,10 @@ The interpolation is done using the \code{tf} package. See \code{\link[tf:tfd]{t
 }
 \section{Parameters}{
 
-The parameters are the parameters inherited from \code{\link{PipeOpTaskPreprocSimple}}, as well as the following
-parameters:
+The parameters are the parameters inherited from \code{\link[mlr3pipelines:PipeOpTaskPreprocSimple]{PipeOpTaskPreprocSimple}},
+as well as the following parameters:
 \itemize{
-\item \code{grid} :: \code{character(1)} | numeric() \cr
+\item \code{grid} :: \code{character(1)} | \code{numeric()} \cr
 The grid to use for interpolation.
 If \code{grid} is numeric, it must be a sequence of values to use for the grid or a single value that
 specifies the number of points to use for the grid, requires \code{left} and \code{right} to be specified in the latter case.
@@ -51,8 +51,6 @@ The right boundary of the window.
 }
 
 \examples{
-library(mlr3pipelines)
-
 task = tsk("fuel")
 pop = po("fda.interpol")
 task_interpol = pop$train(list(task))[[1L]]

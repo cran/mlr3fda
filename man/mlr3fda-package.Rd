@@ -13,7 +13,7 @@ Extends the 'mlr3' ecosystem to functional analysis by adding support for irregu
 To extend mlr3 to functional data, two data types from the tf package are added:
 \itemize{
 \item \code{tfd_irreg} - Irregular functional data, i.e. the functions are observed for
-potentiall different inputs for each observation.
+potentially different inputs for each observation.
 \item \code{tfd_reg} - Regular functional data, i.e. the functions are observed for the same input
 for each individual.
 }
@@ -38,7 +38,7 @@ Useful links:
 
 Authors:
 \itemize{
-  \item Maximilian Muecke \email{muecke.maximilian@gmail.com} (\href{https://orcid.org/0009-0000-9432-9795}{ORCID})
+  \item Maximilian Mücke \email{muecke.maximilian@gmail.com} (\href{https://orcid.org/0009-0000-9432-9795}{ORCID})
 }
 
 Other contributors:

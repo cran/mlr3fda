@@ -1,9 +1,11 @@
 # dev
 
-# mlr3fda 0.1.1
+# mlr3fda 0.2.0
 
-* Better documentation for Tasks
-* Use internal test helpers from `mlr3pipelines`
+* New PipeOps:
+  * `PipeOpFDACor`
+  * `PipeOpFDAScaleRange`
+* mlr3fda now depends on mlr3pipelines
 
 # mlr3fda 0.1.1
 

@@ -5,10 +5,10 @@
 #' @description
 #' This is the class that extracts simple features from functional columns.
 #' Note that it only operates on values that were actually observed and does not interpolate.
-#!]'
+#'
 #' @section Parameters:
-#' The parameters are the parameters inherited from [`PipeOpTaskPreprocSimple`], as well as the following
-#' parameters:
+#' The parameters are the parameters inherited from [`PipeOpTaskPreprocSimple`][mlr3pipelines::PipeOpTaskPreprocSimple],
+#' as well as the following parameters:
 #' * `drop` :: `logical(1)`\cr
 #'   Whether to drop the original `functional` features and only keep the extracted features.
 #'   Note that this does not remove the features from the backend, but only from the active
@@ -35,8 +35,6 @@
 #'
 #' @export
 #' @examples
-#' library(mlr3pipelines)
-#'
 #' task = tsk("fuel")
 #' po_fmean = po("fda.extract", features = "mean")
 #' task_fmean = po_fmean$train(list(task))[[1L]]
@@ -52,7 +50,7 @@
 #' task_custom = po_custom$train(list(task))[[1L]]
 #' task_custom
 PipeOpFDAExtract = R6Class("PipeOpFDAExtract",
-  inherit = mlr3pipelines::PipeOpTaskPreprocSimple,
+  inherit = PipeOpTaskPreprocSimple,
   public = list(
     #' @description Initializes a new instance of this Class.
     #' @param id (`character(1)`)\cr

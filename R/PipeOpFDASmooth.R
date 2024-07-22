@@ -2,19 +2,19 @@
 #' @name mlr_pipeops_fda.smooth
 #'
 #' @description
-#' Smoothes functional data using [`tf::tf_smooth()`].
+#' Smoothes functional data using [tf::tf_smooth()].
 #' This preprocessing operator is similar to [`PipeOpFDAInterpol`], however it does not interpolate to unobserved
 #' x-values, but rather smooths the observed values.
 #'
 #' @section Parameters:
-#' The parameters are the parameters inherited from [`PipeOpTaskPreprocSimple`], as well as the following
-#' parameters:
+#' The parameters are the parameters inherited from [`PipeOpTaskPreprocSimple`][mlr3pipelines::PipeOpTaskPreprocSimple],
+#' as well as the following parameters:
 #' * `method` :: `character(1)`\cr
 #'   One of:
-#'   * "lowess": locally weighted scatterplot smoothing (default)
-#'   * "rollmean": rolling mean
-#'   * "rollmedian": rolling meadian
-#'   * "savgol":  Savitzky-Golay filtering
+#'   * `"lowess"`: locally weighted scatterplot smoothing (default)
+#'   * `"rollmean"`: rolling mean
+#'   * `"rollmedian"`: rolling meadian
+#'   * `"savgol"`:  Savitzky-Golay filtering
 #'
 #'   All methods but "lowess" ignore non-equidistant arg values.
 #' * `args` :: named `list()`\cr
@@ -26,15 +26,13 @@
 #'
 #' @export
 #' @examples
-#' library(mlr3pipelines)
-#'
 #' task = tsk("fuel")
 #' po_smooth = po("fda.smooth", method = "rollmean", args = list(k = 5))
 #' task_smooth = po_smooth$train(list(task))[[1L]]
 #' task_smooth
 #' task_smooth$data(cols = c("NIR", "UVVIS"))
 PipeOpFDASmooth = R6Class("PipeOpFDASmooth",
-  inherit = mlr3pipelines::PipeOpTaskPreprocSimple,
+  inherit = PipeOpTaskPreprocSimple,
   public = list(
     #' @description Initializes a new instance of this Class.
     #' @param id (`character(1)`)\cr
@@ -45,8 +43,9 @@ PipeOpFDASmooth = R6Class("PipeOpFDASmooth",
     initialize = function(id = "fda.smooth", param_vals = list()) {
       param_set = ps(
         method = p_fct(default = "lowess", c("lowess", "rollmean", "rollmedian", "savgol"), tags = c("train", "predict")), # nolint
-        args = p_uty(tags = c("train", "predict", "required"),
-          custom_check = crate(function(x) check_list(x, names = "unique"))),
+        args = p_uty(
+          tags = c("train", "predict", "required"), custom_check = crate(function(x) check_list(x, names = "unique"))
+        ),
         verbose = p_lgl(tags = c("train", "predict", "required"))
       )
 

@@ -6,7 +6,7 @@
 #' to new columns, one for each input value to the function.
 #'
 #' @section Parameters:
-#' The parameters are the parameters inherited from [`PipeOpTaskPreprocSimple`].
+#' The parameters are the parameters inherited from [`PipeOpTaskPreprocSimple`][mlr3pipelines::PipeOpTaskPreprocSimple].
 #'
 #' @section Naming:
 #' The new names generally append a `_1`, ...,  to the corresponding column name.
@@ -18,13 +18,11 @@
 #'
 #' @export
 #' @examples
-#' library(mlr3pipelines)
-#'
 #' task = tsk("fuel")
 #' pop = po("fda.flatten")
 #' task_flat = pop$train(list(task))
 PipeOpFDAFlatten = R6Class("PipeOpFDAFlatten",
-  inherit = mlr3pipelines::PipeOpTaskPreprocSimple,
+  inherit = PipeOpTaskPreprocSimple,
   public = list(
     #' @description Initializes a new instance of this Class.
     #' @param id (`character(1)`)\cr
@@ -73,9 +71,9 @@ PipeOpFDAFlatten = R6Class("PipeOpFDAFlatten",
       if (anyDuplicated(c(task$col_info$id, feature_names))) {
         unique_names = make.unique(c(task$col_info$id, feature_names), sep = "_")
         feature_names = tail(unique_names, length(feature_names))
+        setnames(dt_flat, feature_names)
         lg$debug(sprintf("Duplicate names found in pipeop %s", self$id), feature_names = feature_names)
       }
-      colnames(dt_flat) = feature_names
 
       task$select(setdiff(task$feature_names, cols))$cbind(dt_flat)
     }

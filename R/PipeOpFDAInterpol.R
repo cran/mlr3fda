@@ -7,9 +7,9 @@
 #' The interpolation is done using the `tf` package. See [`tfd()`][tf::tfd] for details.
 #'
 #' @section Parameters:
-#' The parameters are the parameters inherited from [`PipeOpTaskPreprocSimple`], as well as the following
-#' parameters:
-#' * `grid` :: `character(1)` | numeric() \cr
+#' The parameters are the parameters inherited from [`PipeOpTaskPreprocSimple`][mlr3pipelines::PipeOpTaskPreprocSimple],
+#' as well as the following parameters:
+#' * `grid` :: `character(1)` | `numeric()` \cr
 #'   The grid to use for interpolation.
 #'   If `grid` is numeric, it must be a sequence of values to use for the grid or a single value that
 #'   specifies the number of points to use for the grid, requires `left` and `right` to be specified in the latter case.
@@ -41,14 +41,12 @@
 #'
 #' @export
 #' @examples
-#' library(mlr3pipelines)
-#'
 #' task = tsk("fuel")
 #' pop = po("fda.interpol")
 #' task_interpol = pop$train(list(task))[[1L]]
 #' task_interpol$data()
 PipeOpFDAInterpol = R6Class("PipeOpFDAInterpol",
-  inherit = mlr3pipelines::PipeOpTaskPreprocSimple,
+  inherit = PipeOpTaskPreprocSimple,
   public = list(
     #' @description Initializes a new instance of this Class.
     #' @param id (`character(1)`)\cr
@@ -65,7 +63,7 @@ PipeOpFDAInterpol = R6Class("PipeOpFDAInterpol",
           if (test_numeric(x, any.missing = FALSE, min.len = 1L)) {
             return(TRUE)
           }
-          "Must be either a string or numeric vector."
+          "Must be either a string or numeric vector"
         })),
         method = p_fct(
           c("linear", "spline", "fill_extend", "locf", "nocb"), default = "linear", tags = c("train", "predict")

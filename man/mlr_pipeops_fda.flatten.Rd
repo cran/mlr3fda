@@ -10,7 +10,7 @@ to new columns, one for each input value to the function.
 }
 \section{Parameters}{
 
-The parameters are the parameters inherited from \code{\link{PipeOpTaskPreprocSimple}}.
+The parameters are the parameters inherited from \code{\link[mlr3pipelines:PipeOpTaskPreprocSimple]{PipeOpTaskPreprocSimple}}.
 }
 
 \section{Naming}{
@@ -24,8 +24,6 @@ a warning is given.
 }
 
 \examples{
-library(mlr3pipelines)
-
 task = tsk("fuel")
 pop = po("fda.flatten")
 task_flat = pop$train(list(task))

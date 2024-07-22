@@ -7,11 +7,12 @@
 #'
 #' To apply this `PipeOp` to irregualr data, convert it to a regular grid first using [`PipeOpFDAInterpol`].
 #'
-#' For more details, see [`tfb_fpc()`][tf::tfb_fpc], which is called internally.
+#' For more details, see [tf::tfb_fpc()], which is called internally.
 #'
 #'
 #' @section Parameters:
-#' The parameters are the parameters inherited from [`PipeOpTaskPreproc`], as well as the following parameters:
+#' The parameters are the parameters inherited from [`PipeOpTaskPreproc`][mlr3pipelines::PipeOpTaskPreproc],
+#' as well as the following parameters:
 #' * `pve` :: `numeric(1)` \cr
 #'   The percentage of variance explained that should be retained. Default is `0.995`.
 #' * `n_components` :: `integer(1)` \cr
@@ -24,14 +25,12 @@
 #'
 #' @export
 #' @examples
-#' library(mlr3pipelines)
-#'
 #' task = tsk("fuel")
 #' po_fpca = po("fda.fpca", n_components = 3L)
 #' task_fpca = po_fpca$train(list(task))[[1L]]
 #' task_fpca$data()
 PipeOpFPCA = R6Class("PipeOpFPCA",
-  inherit = mlr3pipelines::PipeOpTaskPreproc,
+  inherit = PipeOpTaskPreproc,
   public = list(
     #' @description Initializes a new instance of this Class.
     #' @param id (`character(1)`)\cr
@@ -60,7 +59,9 @@ PipeOpFPCA = R6Class("PipeOpFPCA",
     .train_dt = function(dt, levels, target) {
       pars = self$param_set$get_values(tags = "train")
 
-      dt = map_dtc(dt, function(x, nm) invoke(tf::tfb_fpc, data = x, .args = remove_named(pars, "n_components")))
+      dt = map_dtc(dt, function(x, nm) {
+        invoke(tf::tfb_fpc, data = x, .args = remove_named(pars, "n_components"))
+      })
       self$state = list(fpc = dt)
 
       dt = imap_dtc(dt, function(col, nm) {
@@ -69,20 +70,25 @@ PipeOpFPCA = R6Class("PipeOpFPCA",
           set_names(pc, sprintf("%s_pc_%d", nm, seq_along(pc)))
         })
       })
-      unnest(dt, colnames(dt))
+      unnest(dt, names(dt))
     },
 
     .predict_dt = function(dt, levels) {
       pars = self$param_set$get_values()
 
       dt = imap_dtc(dt, function(col, nm) {
-        fpc = tf::tf_rebase(col, self$state$fpc[[nm]], arg = tf::tf_arg(col))
+        fpc = invoke(
+          tf::tf_rebase,
+          object = col,
+          basis_from = self$state$fpc[[nm]],
+          arg = tf::tf_arg(col)
+        )
         map(fpc, function(x) {
           pc = as.list(x[2:min(pars$n_components + 1L, length(x))])
           set_names(pc, sprintf("%s_pc_%d", nm, seq_along(pc)))
         })
       })
-      unnest(dt, colnames(dt))
+      unnest(dt, names(dt))
     }
   )
 )
