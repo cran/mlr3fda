@@ -1,4 +1,4 @@
-#' @title Linearly Transform the Domain of Functional Data.
+#' @title Linearly Transform the Domain of Functional Data
 #' @name mlr_pipeops_fda.scalerange
 #'
 #' @description
@@ -10,9 +10,9 @@
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`][mlr3pipelines::PipeOpTaskPreproc],
 #' as well as the following parameters:
-#' * `lower` :: `numeric(1)` \cr
+#' * `lower` :: `numeric(1)`\cr
 #' Target value of smallest item of input data. Initialized to `0`.
-#' * `uppper` :: `numeric(1)` \cr
+#' * `uppper` :: `numeric(1)`\cr
 #' Target value of greatest item of input data. Initialized to `1`.
 #'
 #' @export
@@ -27,7 +27,7 @@ PipeOpFDAScaleRange = R6Class("PipeOpFDAScaleRange",
     #' @description Initializes a new instance of this Class.
     #' @param id (`character(1)`)\cr
     #'   Identifier of resulting object, default `"fda.scalerange"`.
-    #' @param param_vals (named `list`)\cr
+    #' @param param_vals (named `list()`)\cr
     #'   List of hyperparameter settings, overwriting the hyperparameter settings that would
     #'   otherwise be set during construction. Default `list()`.
     initialize = function(id = "fda.scalerange", param_vals = list()) {
@@ -51,11 +51,12 @@ PipeOpFDAScaleRange = R6Class("PipeOpFDAScaleRange",
     .train_dt = function(dt, levels, target) {
       pars = self$param_set$get_values(tags = "train")
 
-      imap_dtc(dt, function(x, nm) {
+      for (j in names(dt)) {
+        x = dt[[j]]
         domain = tf::tf_domain(x)
         scale = (pars$upper - pars$lower) / (domain[2L] - domain[1L])
         offset = -domain[1L] * scale + pars$lower
-        self$state[[nm]] = list(domain = domain, scale = scale, offset = offset)
+        self$state[[j]] = list(domain = domain, scale = scale, offset = offset)
 
         args = tf::tf_arg(x)
         if (tf::is_reg(x)) {
@@ -63,13 +64,15 @@ PipeOpFDAScaleRange = R6Class("PipeOpFDAScaleRange",
         } else {
           new_args = map(args, function(arg) offset + arg * scale)
         }
-        invoke(tf::tfd, data = tf::tf_evaluations(x), arg = new_args)
-      })
+        set(dt, j = j, value = invoke(tf::tfd, data = tf::tf_evaluations(x), arg = new_args))
+      }
+      dt
     },
 
     .predict_dt = function(dt, levels) {
-      imap_dtc(dt, function(x, nm) {
-        trafo = self$state[[nm]]
+      for (j in names(dt)) {
+        x = dt[[j]]
+        trafo = self$state[[j]]
         if (!all(trafo$domain == tf::tf_domain(x))) {
           stopf("Domain of new data does not match the domain of the training data.")
         }
@@ -79,8 +82,9 @@ PipeOpFDAScaleRange = R6Class("PipeOpFDAScaleRange",
         } else {
           new_args = map(args, function(arg) trafo$offset + arg * trafo$scale)
         }
-        invoke(tf::tfd, data = tf::tf_evaluations(x), arg = new_args)
-      })
+        set(dt, j = j, value = invoke(tf::tfd, data = tf::tf_evaluations(x), arg = new_args))
+      }
+      dt
     }
   )
 )

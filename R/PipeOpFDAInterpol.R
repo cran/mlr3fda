@@ -9,7 +9,7 @@
 #' @section Parameters:
 #' The parameters are the parameters inherited from [`PipeOpTaskPreprocSimple`][mlr3pipelines::PipeOpTaskPreprocSimple],
 #' as well as the following parameters:
-#' * `grid` :: `character(1)` | `numeric()` \cr
+#' * `grid` :: `character(1)` | `numeric()`\cr
 #'   The grid to use for interpolation.
 #'   If `grid` is numeric, it must be a sequence of values to use for the grid or a single value that
 #'   specifies the number of points to use for the grid, requires `left` and `right` to be specified in the latter case.
@@ -26,17 +26,17 @@
 #'     This bounded grid encapsulates the argument point range common to all features.
 #'   Note: For regular functional data this has no effect as all argument points are the same.
 #'   Initial value is `"union"`.
-#' * `method` :: `character(1)` \cr
+#' * `method` :: `character(1)`\cr
 #'   Defaults to `"linear"`. One of:
 #'   * `"linear"`: applies linear interpolation without extrapolation (see [tf::tf_approx_linear()]).
 #'   * `"spline"`: applies cubic spline interpolation (see [tf::tf_approx_spline()]).
 #'   * `"fill_extend"`: applies linear interpolation with constant extrapolation (see [tf::tf_approx_fill_extend()]).
 #'   * `"locf"`: applies "last observation carried forward" interpolation (see [tf::tf_approx_locf()]).
 #'   * `"nocb"`: applies "next observation carried backward" interpolation (see [tf::tf_approx_nocb()]).
-#' * `left` :: `numeric()` \cr
+#' * `left` :: `numeric()`\cr
 #'   The left boundary of the window.
 #'   The window is specified such that the all values >=left and <=right are kept for the computations.
-#' * `right` :: `numeric()` \cr
+#' * `right` :: `numeric()`\cr
 #'   The right boundary of the window.
 #'
 #' @export
@@ -51,7 +51,7 @@ PipeOpFDAInterpol = R6Class("PipeOpFDAInterpol",
     #' @description Initializes a new instance of this Class.
     #' @param id (`character(1)`)\cr
     #'   Identifier of resulting object, default `"fda.interpol"`.
-    #' @param param_vals (named `list`)\cr
+    #' @param param_vals (named `list()`)\cr
     #'   List of hyperparameter settings, overwriting the hyperparameter settings that would
     #'   otherwise be set during construction. Default `list()`.
     initialize = function(id = "fda.interpol", param_vals = list()) {
@@ -106,41 +106,41 @@ PipeOpFDAInterpol = R6Class("PipeOpFDAInterpol",
         if (length(grid) > 1L && !has_left && !has_right) {
           max_grid = max(grid)
           min_grid = min(grid)
-          dt = map_dtc(dt, function(x) {
+          for (j in seq_along(dt)) {
+            x = dt[[j]]
             domain = tf::tf_domain(x)
             if (min_grid < domain[[1L]] || max_grid > domain[[2L]]) {
               stopf("The grid must be within the range of the domain.")
             }
-            invoke(tf::tfd, data = x, arg = grid, .args = list(evaluator = evaluator))
-          })
+            set(dt, j = j, value = invoke(tf::tfd, data = x, arg = grid, .args = list(evaluator = evaluator)))
+          }
           return(dt)
         }
         arg = seq(left, right, length.out = grid)
-        dt = map_dtc(dt, function(x) invoke(tf::tfd, data = x, arg = arg, .args = list(evaluator = evaluator)))
+        for (j in seq_along(dt)) {
+          set(dt, j = j, value = invoke(tf::tfd, data = dt[[j]], arg = arg, .args = list(evaluator = evaluator)))
+        }
         return(dt)
       }
 
-      dt = map_dtc(dt, function(x) {
-        if (tf::is_reg(x)) {
-          return(x)
+      for (j in seq_along(dt)) {
+        x = dt[[j]]
+        if (tf::is_irreg(x)) {
+          arg = tf::tf_arg(x)
+          arg = switch(
+            grid,
+            union = sort(unique(unlist(arg, recursive = FALSE, use.names = FALSE))),
+            intersect = Reduce(intersect, arg),
+            minmax = {
+              lower = max(map_dbl(arg, 1L))
+              upper = min(map_dbl(arg, function(arg) arg[[length(arg)]]))
+              arg = sort(unique(unlist(arg, recursive = FALSE, use.names = FALSE)))
+              arg[seq(which(lower == arg), which(upper == arg))]
+            }
+          )
+          set(dt, j = j, value = invoke(tf::tfd, data = x, arg = arg, .args = list(evaluator = evaluator)))
         }
-        arg = tf::tf_arg(x)
-        switch(grid,
-          union = {
-            arg = sort(unique(unlist(arg)))
-          },
-          intersect = {
-            arg = Reduce(intersect, arg)
-          },
-          minmax = {
-            lower = max(map_dbl(arg, 1L))
-            upper = min(map_dbl(arg, function(arg) arg[[length(arg)]]))
-            arg = sort(unique(unlist(arg)))
-            arg = arg[seq(which(lower == arg), which(upper == arg))]
-          }
-        )
-        invoke(tf::tfd, data = x, arg = arg, .args = list(evaluator = evaluator))
-      })
+      }
       dt
     }
   )

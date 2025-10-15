@@ -1,11 +1,10 @@
-#' @import mlr3
-#' @import checkmate
-#' @import mlr3misc
-#' @import paradox
-#' @import mlr3misc
 #' @import R6
+#' @import checkmate
 #' @import data.table
+#' @import mlr3
+#' @import mlr3misc
 #' @import mlr3pipelines
+#' @import paradox
 #' @importFrom tf tf_approx_linear tf_approx_spline tf_approx_fill_extend tf_approx_locf tf_approx_nocb
 #'
 #' @section Data types:
@@ -18,28 +17,24 @@
 #' `r tools::toRd(citation("mlr3"))`
 "_PACKAGE"
 
-
-# metainf must be manually added in the register_mlr3pipelines function
-# Because the value is substituted, we cannot pass it through this function
-register_po = function(name, constructor) {
-  if (name %in% names(mlr3fda_pipeops)) stopf("pipeop %s registered twice", name)
-  mlr3fda_pipeops[[name]] = list(constructor = constructor)
-}
-
-register_task = function(name, constructor) {
-  if (name %in% names(mlr3fda_tasks)) stopf("task %s registered twice", name)
-  mlr3fda_tasks[[name]] = constructor
-}
-
-named_union = function(x, y) {
-  z = union(x, y)
-  set_names(z, union(names(x), names(y)))
-}
-
 mlr3fda_feature_types = c(tfr = "tfd_reg", tfi = "tfd_irreg")
 mlr3fda_tasks = new.env()
 mlr3fda_pipeops = new.env()
 mlr3fda_pipeop_tags = "fda"
+
+named_union = function(x, y) set_names(union(x, y), union(names(x), names(y)))
+
+# metainf must be manually added in the register_mlr3pipelines function
+# Because the value is substituted, we cannot pass it through this function
+register_po = function(name, constructor) {
+  if (name %chin% names(mlr3fda_pipeops)) stopf("pipeop %s registered twice", name)
+  mlr3fda_pipeops[[name]] = list(constructor = constructor)
+}
+
+register_task = function(name, constructor) {
+  if (name %chin% names(mlr3fda_tasks)) stopf("task %s registered twice", name)
+  mlr3fda_tasks[[name]] = constructor
+}
 
 register_mlr3 = function() {
   # add data types
@@ -48,10 +43,7 @@ register_mlr3 = function() {
 
   # add tasks
   mlr_tasks = utils::getFromNamespace("mlr_tasks", ns = "mlr3")
-  iwalk(as.list(mlr3fda_tasks), function(task, id) {
-    mlr_tasks$add(id, task)
-  })
-
+  iwalk(as.list(mlr3fda_tasks), function(task, id) mlr_tasks$add(id, task))
 }
 
 register_mlr3pipelines = function() {
@@ -60,7 +52,7 @@ register_mlr3pipelines = function() {
   iwalk(as.list(mlr3fda_pipeops), function(value, name) {
     mlr_pipeops$add(name, value$constructor, value$metainf)
   })
-  mlr_reflections$pipeops$valid_tags = unique(c(mlr_reflections$pipeops$valid_tags, mlr3fda_pipeop_tags))
+  mlr_reflections$pipeops$valid_tags = union(mlr_reflections$pipeops$valid_tags, mlr3fda_pipeop_tags)
 }
 
 .onLoad = function(libname, pkgname) {
@@ -75,7 +67,8 @@ register_mlr3pipelines = function() {
 .onUnload = function(libPaths) { # nolint
   walk(names(mlr3fda_tasks), function(nm) mlr_tasks$remove(nm))
   walk(names(mlr3fda_pipeops), function(nm) mlr_pipeops$remove(nm))
-  mlr_reflections$learner_feature_types = setdiff(mlr_reflections$learner_feature_types, mlr3fda_feature_types)
+  mlr_reflections$task_feature_types =
+    mlr_reflections$task_feature_types[mlr_reflections$task_feature_types %nin% mlr3fda_feature_types]
   mlr_reflections$pipeops$valid_tags = setdiff(mlr_reflections$pipeops$valid_tags, mlr3fda_pipeop_tags)
 }
 

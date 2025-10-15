@@ -13,16 +13,16 @@
 #'   Whether to drop the original `functional` features and only keep the extracted features.
 #'   Note that this does not remove the features from the backend, but only from the active
 #'   column role `feature`. Initial value is `TRUE`.
-#' * `features` :: `list()` | `character()` \cr
+#' * `features` :: `list()` | `character()`\cr
 #'   A list of features to extract. Each element can be either a function or a string.
 #'   If the element if is function it requires the following arguments: `arg` and `value` and returns a `numeric`.
 #'   For string elements, the following predefined features are available:
 #'   `"mean"`, `"max"`,`"min"`,`"slope"`,`"median"`,`"var"`.
 #'   Initial is `c("mean", "max", "min", "slope", "median", "var")`
-#' * `left` :: `numeric()` \cr
+#' * `left` :: `numeric()`\cr
 #'   The left boundary of the window. Initial is `-Inf`.
 #'   The window is specified such that the all values >=left and <=right are kept for the computations.
-#' * `right` :: `numeric()` \cr
+#' * `right` :: `numeric()`\cr
 #'   The right boundary of the window. Initial is `Inf`.
 #'
 #' @section Naming:
@@ -55,7 +55,7 @@ PipeOpFDAExtract = R6Class("PipeOpFDAExtract",
     #' @description Initializes a new instance of this Class.
     #' @param id (`character(1)`)\cr
     #'   Identifier of resulting object, default is `"fda.extract"`.
-    #' @param param_vals (named `list`)\cr
+    #' @param param_vals (named `list()`)\cr
     #'   List of hyperparameter settings, overwriting the hyperparameter settings that would
     #'   otherwise be set during construction. Default `list()`.
     initialize = function(id = "fda.extract", param_vals = list()) {
@@ -89,7 +89,7 @@ PipeOpFDAExtract = R6Class("PipeOpFDAExtract",
                 }
               } else {
                 res = check_choice(x[[i]], choices = c("mean", "median", "min", "max", "slope", "var"))
-                if (!isTRUE(res)) {
+                if (!isTRUE(res)) { # nolint
                   return(res)
                 }
               }
@@ -111,7 +111,7 @@ PipeOpFDAExtract = R6Class("PipeOpFDAExtract",
         param_set = param_set,
         param_vals = param_vals,
         packages = c("mlr3fda", "mlr3pipelines", "tf"),
-        feature_types = c("tfd_irreg", "tfd_reg"),
+        feature_types = c("tfd_reg", "tfd_irreg"),
         tags = "fda"
       )
     }
@@ -119,7 +119,7 @@ PipeOpFDAExtract = R6Class("PipeOpFDAExtract",
   private = list(
     .transform = function(task) {
       cols = self$state$dt_columns
-      if (!length(cols)) {
+      if (length(cols) == 0L) {
         return(task)
       }
       dt = task$data(cols = cols)
@@ -131,9 +131,7 @@ PipeOpFDAExtract = R6Class("PipeOpFDAExtract",
       assert_true(left <= right)
 
       # handle name clashes of generated features with existing columns
-      feature_names = imap_chr(features, function(value, nm) {
-        if (is.function(value)) nm else value
-      })
+      feature_names = imap_chr(features, function(value, nm) if (is.function(value)) nm else value)
       feature_names = as.vector(t(outer(cols, feature_names, paste, sep = "_")))
 
       if (anyDuplicated(c(task$col_info$id, feature_names))) {
@@ -158,9 +156,8 @@ PipeOpFDAExtract = R6Class("PipeOpFDAExtract",
       fextractor = make_fextractor(features)
 
       features = map(cols, function(col) invoke(fextractor, x = dt[[col]], left = left, right = right))
-      features = unlist(features, recursive = FALSE)
-      features = set_names(features, feature_names)
-      features = as.data.table(features)
+      features = setDT(unlist(features, recursive = FALSE, use.names = FALSE))
+      setnames(features, feature_names)
 
       if (!drop) {
         features = cbind(dt, features)
@@ -215,8 +212,8 @@ make_fextractor = function(features) {
 }
 
 transform_list = function(x) {
-  x = transpose_list(x)
-  map(x, unlist)
+  res = transpose(x)
+  map(res, function(x) unlist(x, recursive = FALSE, use.names = FALSE))
 }
 
 ffind = function(x, left = -Inf, right = Inf) {

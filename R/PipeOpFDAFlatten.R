@@ -27,15 +27,12 @@ PipeOpFDAFlatten = R6Class("PipeOpFDAFlatten",
     #' @description Initializes a new instance of this Class.
     #' @param id (`character(1)`)\cr
     #'   Identifier of resulting object, default `"fda.flatten"`.
-    #' @param param_vals (named `list`)\cr
+    #' @param param_vals (named `list()`)\cr
     #'   List of hyperparameter settings, overwriting the hyperparameter settings that would
     #'   otherwise be set during construction. Default `list()`.
     initialize = function(id = "fda.flatten", param_vals = list()) {
-      param_set = ps()
-
       super$initialize(
         id = id,
-        param_set = param_set,
         param_vals = param_vals,
         packages = c("mlr3fda", "mlr3pipelines", "tf"),
         feature_types = c("tfd_reg", "tfd_irreg"),
@@ -46,23 +43,20 @@ PipeOpFDAFlatten = R6Class("PipeOpFDAFlatten",
   private = list(
     .transform = function(task) {
       cols = self$state$dt_columns
-      if (!length(cols)) {
+      if (length(cols) == 0L) {
         return(task)
       }
       dt = task$data(cols = cols)
 
-      flattened = imap(
-        dt,
-        function(x, nm) {
-          if (tf::is_irreg(x)) {
-            flat = suppressWarnings(as.matrix(x))
-          } else {
-            flat = as.matrix(x)
-          }
-          d = as.data.table(flat)
-          setnames(d, sprintf("%s_%s", nm, seq_len(ncol(flat))))
+      flattened = imap(dt, function(x, nm) {
+        if (tf::is_irreg(x)) {
+          flat = suppressWarnings(as.matrix(x))
+        } else {
+          flat = as.matrix(x)
         }
-      )
+        d = as.data.table(flat)
+        setnames(d, sprintf("%s_%i", nm, seq_len(ncol(flat))))
+      })
       names(flattened) = NULL # this does not set the data.table names to NULL but the list names
       # convert to data.table and append names
       dt_flat = invoke(cbind, .args = flattened)
