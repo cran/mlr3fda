@@ -1,3 +1,9 @@
+# mlr3fda 0.4.0
+
+* fix: The `fuel` task now correctly names the scalar column `h2o` instead of `h20`.
+* feat: `Mlr3Error` and `Mlr3Warning` classes for errors and warnings.
+* feat: New `PipeOpFDAFourier` for extracting fast Fourier transform features from functional columns.
+
 # mlr3fda 0.3.0
 
 * mlr3fda now depends on R 4.1.0 instead of R 3.1.0 to reflect tf requiring 4.1.0

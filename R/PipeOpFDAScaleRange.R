@@ -12,7 +12,7 @@
 #' as well as the following parameters:
 #' * `lower` :: `numeric(1)`\cr
 #' Target value of smallest item of input data. Initialized to `0`.
-#' * `uppper` :: `numeric(1)`\cr
+#' * `upper` :: `numeric(1)`\cr
 #' Target value of greatest item of input data. Initialized to `1`.
 #'
 #' @export
@@ -74,7 +74,7 @@ PipeOpFDAScaleRange = R6Class("PipeOpFDAScaleRange",
         x = dt[[j]]
         trafo = self$state[[j]]
         if (!all(trafo$domain == tf::tf_domain(x))) {
-          stopf("Domain of new data does not match the domain of the training data.")
+          error_input("Domain of new data does not match the domain of the training data.")
         }
         args = tf::tf_arg(x)
         if (tf::is_reg(x)) {

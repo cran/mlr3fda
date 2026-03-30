@@ -4,13 +4,13 @@ test_that("PipeOpFDAZoom - basic properties", {
   expect_identical(pop$id, "fda.zoom")
 })
 
-test_that("PipeOpScaleRange works", {
+test_that("PipeOpFDAZoom works", {
   task = tsk("fuel")
   pop = po("fda.zoom", begin = 50, end = 100)
   task_zoom = train_pipeop(pop, list(task))[[1L]]
   new_data = task_zoom$data()
   expect_task(task_zoom)
-  expect_identical(dim(new_data), c(129L, 4L))
+  expect_shape(new_data, dim = c(129L, 4L))
   expect_identical(task_zoom$n_features, task$n_features)
   expect_named(new_data, names(new_data))
   expect_numeric(tf::tf_arg(new_data$NIR), lower = 50, upper = 100)

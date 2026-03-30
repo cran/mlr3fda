@@ -31,7 +31,7 @@
 #' * `Z` :: `any`\cr
 #'   Custom transformation matrix for the spline design.
 #' * `penalty` :: `character(1)`\cr
-#'   The penalty type: `"ps"` (P-spline) or `"pss"` (shrinkage). DEfault is `"ps"`.
+#'   The penalty type: `"ps"` (P-spline) or `"pss"` (shrinkage). Default is `"ps"`.
 #' * `check.ident` :: `logical(1)`\cr
 #'   Use checks for identifiability of the effect. Default is `FALSE`.
 #'
@@ -90,14 +90,13 @@ PipeOpFDABsignal = R6Class("PipeOpFDABsignal",
     .transform_dt = function(dt, levels) {
       pars = self$param_set$get_values()
 
-      cols = imap(dt, function(x, nm) {
+      setcbindlist(imap(dt, function(x, nm) {
         x = as.matrix(x)
         blrn = invoke(FDboost::bsignal, x = x, s = seq_len(ncol(x)), .args = pars)
         bsignal = mboost::extract(object = blrn, what = "design") # get the design matrix of the base learner
         feats = as.data.table(bsignal)
         setnames(feats, sprintf("%s_bsig_%i", nm, seq_len(ncol(feats))))
-      })
-      setDT(unlist(unname(cols), recursive = FALSE))
+      }))
     }
   )
 )

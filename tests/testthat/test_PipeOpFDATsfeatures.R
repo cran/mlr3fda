@@ -12,24 +12,24 @@ test_that("PipeOpFDATsfeatures works", {
   task_tsfeats = train_pipeop(pop, list(task))[[1L]]
   new_data = task_tsfeats$data()
   expect_task(task_tsfeats)
-  expect_identical(dim(new_data), c(129L, 34L))
+  expect_shape(new_data, dim = c(129L, 34L))
   expect_named(new_data, names(new_data))
 
-  # single feature work
+  # single feature works
   pop = po("fda.tsfeats", features = "entropy")
   task_tsfeats = train_pipeop(pop, list(task))[[1L]]
   new_data = task_tsfeats$data()
   walk(new_data, expect_numeric)
-  expect_identical(dim(new_data), c(129L, 4L))
-  expect_named(new_data, c("heatan", "h20", "NIR_entropy", "UVVIS_entropy"))
+  expect_shape(new_data, dim = c(129L, 4L))
+  expect_named(new_data, c("heatan", "h2o", "NIR_entropy", "UVVIS_entropy"))
 
   # multiple features work
   pop = po("fda.tsfeats", features = c("frequency", "stl_features"))
   task_tsfeats = train_pipeop(pop, list(task))[[1L]]
   new_data = task_tsfeats$data()
   walk(new_data, expect_numeric)
-  expect_identical(dim(new_data), c(129L, 20L))
-  expect_match(setdiff(names(new_data), c("heatan", "h20")), "NIR_|UVVIS_")
+  expect_shape(new_data, dim = c(129L, 20L))
+  expect_match(setdiff(names(new_data), c("heatan", "h2o")), "NIR_|UVVIS_")
 
   # irregular data works
   task = tsk("dti")

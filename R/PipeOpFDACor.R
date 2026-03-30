@@ -6,7 +6,7 @@
 #' Note that it only operates on regular data and that the cross-correlation assumes that each column
 #' has the same domain.
 #'
-#' To apply this `PipeOp` to irregualr data, convert it to a regular grid first using [`PipeOpFDAInterpol`].
+#' To apply this `PipeOp` to irregular data, convert it to a regular grid first using [`PipeOpFDAInterpol`].
 #' If you need to change the domain of the columns, use [`PipeOpFDAScaleRange`].
 #'
 #' @section Parameters:
@@ -53,7 +53,7 @@ PipeOpFDACor = R6Class("PipeOpFDACor",
 
       k = ncol(dt)
       if (k < 2L) {
-        warningf("task has less than 2 columns")
+        warning_input("task has less than 2 columns")
         return(dt)
       }
 
@@ -64,7 +64,7 @@ PipeOpFDACor = R6Class("PipeOpFDACor",
           x = dt[[i]]
           y = dt[[j]]
           if (!all(tf::tf_domain(x) == tf::tf_domain(y))) {
-            stopf("Domain of %s and %s do not match", nms[[j]], nms[[i]])
+            error_input("Domain of %s and %s do not match", nms[[j]], nms[[i]])
           }
           nm = sprintf("%s_%s_cor", nms[[j]], nms[[i]])
           res[[nm]] = invoke(tf::tf_crosscor, x = x, y = y, .args = pars)

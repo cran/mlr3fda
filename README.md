@@ -63,7 +63,7 @@ this task also contains two functional columns `cca` and `rcst`.
 task = tsk("dti")
 task
 #> 
-#> ── <TaskRegr> (340x4): Diffusion Tensor Imaging (DTI) ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+#> ── <TaskRegr> (340x4): Diffusion Tensor Imaging (DTI) ──────────────────────────
 #> • Target: pasat
 #> • Properties: groups
 #> • Features (3):
@@ -109,7 +109,7 @@ glrn$train(task, row_ids = ids$train)
 # make predictions on the test set
 glrn$predict(task, row_ids = ids$test)
 #> 
-#> ── <PredictionRegr> for 111 observations: ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+#> ── <PredictionRegr> for 111 observations: ──────────────────────────────────────
 #>  row_ids truth response
 #>       11    48 49.99174
 #>       12    40 49.99174
@@ -155,5 +155,5 @@ vision behind the project.
 
 ## Acknowledgements
 
-The development of this R-package was supported by Roche Diagonstics
+The development of this R-package was supported by Roche Diagnostics
 R&D.
