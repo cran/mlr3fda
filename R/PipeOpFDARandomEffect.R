@@ -1,4 +1,4 @@
-#' @title Extracts Random Effects from Functional Columns
+#' @title Extract Random Effects from Functional Columns
 #'
 #' @name mlr_pipeops_fda.random_effect
 #'
@@ -22,14 +22,16 @@
 #' task = tsk("dti")
 #' po_fre = po("fda.random_effect")
 #' task_fre = po_fre$train(list(task))[[1L]]
-PipeOpFDARandomEffect = R6Class("PipeOpFDARandomEffect",
+PipeOpFDARandomEffect = R6Class(
+  "PipeOpFDARandomEffect",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
-    #' @description
-    #' Initializes a new instance of this Class
-    #' @param id (`character(1)`) Identifier of the operator, default is `"fda.random_effect"`.
-    #' @param param_vals (named `list()`) List of hyperparameter settings, overwriting
-    #' default settings set during construction.
+    #' @description Initializes a new instance of this Class.
+    #' @param id (`character(1)`)\cr
+    #'   Identifier of resulting object, default `"fda.random_effect"`.
+    #' @param param_vals (named `list()`)\cr
+    #'   List of hyperparameter settings, overwriting the hyperparameter settings that would
+    #'   otherwise be set during construction. Default `list()`.
     initialize = function(id = "fda.random_effect", param_vals = list()) {
       super$initialize(
         id = id,

@@ -1,4 +1,4 @@
-#' @title Extracts Simple Features from Functional Columns
+#' @title Extract Simple Features from Functional Columns
 #'
 #' @name mlr_pipeops_fda.extract
 #'
@@ -17,13 +17,13 @@
 #'   A list of features to extract. Each element can be either a function or a string.
 #'   If the element is a function it requires the following arguments: `arg` and `value` and returns a `numeric`.
 #'   For string elements, the following predefined features are available:
-#'   `"mean"`, `"max"`,`"min"`,`"slope"`,`"median"`,`"var"`.
-#'   Initial is `c("mean", "max", "min", "slope", "median", "var")`
+#'   `"mean"`, `"max"`, `"min"`, `"slope"`, `"median"`, `"var"`.
+#'   Initial value is `c("mean", "max", "min", "slope", "median", "var")`.
 #' * `left` :: `numeric()`\cr
-#'   The left boundary of the window. Initial is `-Inf`.
-#'   The window is specified such that the all values >=left and <=right are kept for the computations.
+#'   The left boundary of the window. Initial value is `-Inf`.
+#'   The window is specified such that all values >=left and <=right are kept for the computations.
 #' * `right` :: `numeric()`\cr
-#'   The right boundary of the window. Initial is `Inf`.
+#'   The right boundary of the window. Initial value is `Inf`.
 #'
 #' @section Naming:
 #' The new names generally append a `_{feature}` to the corresponding column name.
@@ -49,12 +49,13 @@
 #' )
 #' task_custom = po_custom$train(list(task))[[1L]]
 #' task_custom
-PipeOpFDAExtract = R6Class("PipeOpFDAExtract",
+PipeOpFDAExtract = R6Class(
+  "PipeOpFDAExtract",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
     #' @description Initializes a new instance of this Class.
     #' @param id (`character(1)`)\cr
-    #'   Identifier of resulting object, default is `"fda.extract"`.
+    #'   Identifier of resulting object, default `"fda.extract"`.
     #' @param param_vals (named `list()`)\cr
     #'   List of hyperparameter settings, overwriting the hyperparameter settings that would
     #'   otherwise be set during construction. Default `list()`.
@@ -63,41 +64,45 @@ PipeOpFDAExtract = R6Class("PipeOpFDAExtract",
         drop = p_lgl(tags = c("train", "predict", "required")),
         left = p_dbl(tags = c("train", "predict", "required")),
         right = p_dbl(tags = c("train", "predict", "required")),
-        features = p_uty(tags = c("train", "predict", "required"), custom_check = crate(function(x) {
-          if (test_character(x)) {
-            return(check_subset(x, choices = c("mean", "median", "min", "max", "slope", "var")))
-          }
-          if (test_list(x)) {
-            res = check_list(x, types = c("character", "function"), any.missing = FALSE, unique = TRUE)
-            if (!isTRUE(res)) {
-              return(res)
+        features = p_uty(
+          tags = c("train", "predict", "required"),
+          custom_check = crate(function(x) {
+            if (test_character(x)) {
+              return(check_subset(x, choices = c("mean", "median", "min", "max", "slope", "var")))
             }
-            nms = names2(x)
-            res = check_names(nms[!is.na(nms)], "unique")
-            if (!isTRUE(res)) {
-              return(res)
-            }
-            for (i in seq_along(x)) {
-              if (is.function(x[[i]])) {
-                res = check_function(x[[i]], args = c("arg", "value"))
-                if (!isTRUE(res)) {
-                  return(res)
-                }
-                res = check_names(nms[i])
-                if (!isTRUE(res)) {
-                  return(res)
-                }
-              } else {
-                res = check_choice(x[[i]], choices = c("mean", "median", "min", "max", "slope", "var"))
-                if (!isTRUE(res)) { # nolint
-                  return(res)
+            if (test_list(x)) {
+              res = check_list(x, types = c("character", "function"), any.missing = FALSE, unique = TRUE)
+              if (!isTRUE(res)) {
+                return(res)
+              }
+              nms = names2(x)
+              res = check_names(nms[!is.na(nms)], "unique")
+              if (!isTRUE(res)) {
+                return(res)
+              }
+              for (i in seq_along(x)) {
+                if (is.function(x[[i]])) {
+                  res = check_function(x[[i]], args = c("arg", "value"))
+                  if (!isTRUE(res)) {
+                    return(res)
+                  }
+                  res = check_names(nms[i])
+                  if (!isTRUE(res)) {
+                    return(res)
+                  }
+                } else {
+                  res = check_choice(x[[i]], choices = c("mean", "median", "min", "max", "slope", "var"))
+                  # nolint next
+                  if (!isTRUE(res)) {
+                    return(res)
+                  }
                 }
               }
+              return(TRUE)
             }
-            return(TRUE)
-          }
-          "Features must be a character or list"
-        }))
+            "Features must be a character or list"
+          })
+        )
       )
       param_set$set_values(
         drop = TRUE,
@@ -131,7 +136,7 @@ PipeOpFDAExtract = R6Class("PipeOpFDAExtract",
       assert_true(left <= right)
 
       # handle name clashes of generated features with existing columns
-      feature_names = imap_chr(features, function(value, nm) if (is.function(value)) nm else value)
+      feature_names = imap_chr(features, \(value, nm) if (is.function(value)) nm else value)
       feature_names = as.vector(t(outer(cols, feature_names, paste, sep = "_")))
 
       if (anyDuplicated(c(task$col_info$id, feature_names))) {
@@ -144,18 +149,11 @@ PipeOpFDAExtract = R6Class("PipeOpFDAExtract",
         if (is.function(feature)) {
           return(feature)
         }
-        switch(feature,
-          mean = fmean,
-          median = fmedian,
-          min = fmin,
-          max = fmax,
-          slope = fslope,
-          var = fvar
-        )
+        switch(feature, mean = fmean, median = fmedian, min = fmin, max = fmax, slope = fslope, var = fvar)
       })
       fextractor = make_fextractor(features)
 
-      features = map(cols, function(col) invoke(fextractor, x = dt[[col]], left = left, right = right))
+      features = map(cols, \(col) invoke(fextractor, x = dt[[col]], left = left, right = right))
       features = setDT(unlist(features, recursive = FALSE, use.names = FALSE))
       setnames(features, feature_names)
 
@@ -179,7 +177,7 @@ make_fextractor = function(features) {
       upper = interval[[2L]]
 
       if (is.na(lower) || is.na(upper)) {
-        res = map(features, function(f) rep(NA_real_, length(x))) # no observation in the given interval [left, right]
+        res = map(features, \(f) rep(NA_real_, length(x))) # no observation in the given interval [left, right]
         return(res)
       }
 
@@ -187,7 +185,7 @@ make_fextractor = function(features) {
       arg = args[lower:upper]
       res = map(seq_along(x), function(i) {
         value = values[[i]]
-        map(features, function(f) f(arg = arg, value = value[lower:upper]))
+        map(features, \(f) f(arg = arg, value = value[lower:upper]))
       })
       return(transform_list(res))
     }
@@ -204,7 +202,7 @@ make_fextractor = function(features) {
       if (is.na(lower) || is.na(upper)) {
         rep(NA_real_, length(features)) # no observation in the given interval [left, right]
       } else {
-        map(features, function(f) f(arg = arg[lower:upper], value = value[lower:upper]))
+        map(features, \(f) f(arg = arg[lower:upper], value = value[lower:upper]))
       }
     })
     transform_list(res)
@@ -213,7 +211,7 @@ make_fextractor = function(features) {
 
 transform_list = function(x) {
   res = transpose(x)
-  map(res, function(x) unlist(x, recursive = FALSE, use.names = FALSE))
+  map(res, \(x) unlist(x, recursive = FALSE, use.names = FALSE))
 }
 
 ffind = function(x, left = -Inf, right = Inf) {

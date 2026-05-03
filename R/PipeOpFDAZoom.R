@@ -1,4 +1,5 @@
 #' @title Zoom In/Out on Functional Columns
+#'
 #' @name mlr_pipeops_fda.zoom
 #'
 #' @description
@@ -24,7 +25,8 @@
 #' pop = po("fda.zoom", begin = 50, end = 100)
 #' task_zoom = pop$train(list(task))[[1L]]
 #' task_zoom$data()
-PipeOpFDAZoom = R6Class("PipeOpFDAZoom",
+PipeOpFDAZoom = R6Class(
+  "PipeOpFDAZoom",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
     #' @description Initializes a new instance of this Class.
@@ -37,11 +39,11 @@ PipeOpFDAZoom = R6Class("PipeOpFDAZoom",
       param_set = ps(
         begin = p_uty(
           tags = c("train", "predict"),
-          custom_check = crate(function(x) check_numeric(x, finite = TRUE, any.missing = FALSE, min.len = 1))
+          custom_check = crate(\(x) check_numeric(x, finite = TRUE, any.missing = FALSE, min.len = 1))
         ),
         end = p_uty(
           tags = c("train", "predict"),
-          custom_check = crate(function(x) check_numeric(x, finite = TRUE, any.missing = FALSE, min.len = 1))
+          custom_check = crate(\(x) check_numeric(x, finite = TRUE, any.missing = FALSE, min.len = 1))
         )
       )
 

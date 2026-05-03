@@ -3,7 +3,7 @@
 \name{mlr_pipeops_fda.extract}
 \alias{mlr_pipeops_fda.extract}
 \alias{PipeOpFDAExtract}
-\title{Extracts Simple Features from Functional Columns}
+\title{Extract Simple Features from Functional Columns}
 \description{
 This is the class that extracts simple features from functional columns.
 Note that it only operates on values that were actually observed and does not interpolate.
@@ -21,13 +21,13 @@ column role \code{feature}. Initial value is \code{TRUE}.
 A list of features to extract. Each element can be either a function or a string.
 If the element is a function it requires the following arguments: \code{arg} and \code{value} and returns a \code{numeric}.
 For string elements, the following predefined features are available:
-\code{"mean"}, \code{"max"},\code{"min"},\code{"slope"},\code{"median"},\code{"var"}.
-Initial is \code{c("mean", "max", "min", "slope", "median", "var")}
+\code{"mean"}, \code{"max"}, \code{"min"}, \code{"slope"}, \code{"median"}, \code{"var"}.
+Initial value is \code{c("mean", "max", "min", "slope", "median", "var")}.
 \item \code{left} :: \code{numeric()}\cr
-The left boundary of the window. Initial is \code{-Inf}.
-The window is specified such that the all values >=left and <=right are kept for the computations.
+The left boundary of the window. Initial value is \code{-Inf}.
+The window is specified such that all values >=left and <=right are kept for the computations.
 \item \code{right} :: \code{numeric()}\cr
-The right boundary of the window. Initial is \code{Inf}.
+The right boundary of the window. Initial value is \code{Inf}.
 }
 }
 
@@ -62,58 +62,59 @@ task_custom
 }
 \section{Methods}{
 \subsection{Public methods}{
-\itemize{
-\item \href{#method-PipeOpFDAExtract-new}{\code{PipeOpFDAExtract$new()}}
-\item \href{#method-PipeOpFDAExtract-clone}{\code{PipeOpFDAExtract$clone()}}
+  \itemize{
+    \item \href{#method-PipeOpFDAExtract-initialize}{\code{PipeOpFDAExtract$new()}}
+    \item \href{#method-PipeOpFDAExtract-clone}{\code{PipeOpFDAExtract$clone()}}
+  }
 }
-}
-\if{html}{\out{
-<details open><summary>Inherited methods</summary>
+\if{html}{\out{<details open><summary>Inherited methods</summary>
 <ul>
-<li><span class="pkg-link" data-pkg="mlr3pipelines" data-topic="PipeOp" data-id="help"><a href='../../mlr3pipelines/html/PipeOp.html#method-PipeOp-help'><code>mlr3pipelines::PipeOp$help()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="mlr3pipelines" data-topic="PipeOp" data-id="predict"><a href='../../mlr3pipelines/html/PipeOp.html#method-PipeOp-predict'><code>mlr3pipelines::PipeOp$predict()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="mlr3pipelines" data-topic="PipeOp" data-id="print"><a href='../../mlr3pipelines/html/PipeOp.html#method-PipeOp-print'><code>mlr3pipelines::PipeOp$print()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="mlr3pipelines" data-topic="PipeOp" data-id="train"><a href='../../mlr3pipelines/html/PipeOp.html#method-PipeOp-train'><code>mlr3pipelines::PipeOp$train()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="mlr3pipelines" data-topic="PipeOp" data-id="help"><a href='../../mlr3pipelines/html/PipeOp.html#method-PipeOp-help'><code>mlr3pipelines::PipeOp$help()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="mlr3pipelines" data-topic="PipeOp" data-id="predict"><a href='../../mlr3pipelines/html/PipeOp.html#method-PipeOp-predict'><code>mlr3pipelines::PipeOp$predict()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="mlr3pipelines" data-topic="PipeOp" data-id="print"><a href='../../mlr3pipelines/html/PipeOp.html#method-PipeOp-print'><code>mlr3pipelines::PipeOp$print()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="mlr3pipelines" data-topic="PipeOp" data-id="train"><a href='../../mlr3pipelines/html/PipeOp.html#method-PipeOp-train'><code>mlr3pipelines::PipeOp$train()</code></a></span></li>
 </ul>
-</details>
-}}
+</details>}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-PipeOpFDAExtract-new"></a>}}
-\if{latex}{\out{\hypertarget{method-PipeOpFDAExtract-new}{}}}
-\subsection{Method \code{new()}}{
-Initializes a new instance of this Class.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PipeOpFDAExtract$new(id = "fda.extract", param_vals = list())}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{id}}{(\code{character(1)})\cr
-Identifier of resulting object, default is \code{"fda.extract"}.}
-
-\item{\code{param_vals}}{(named \code{list()})\cr
+\if{html}{\out{<a id="method-PipeOpFDAExtract-initialize"></a>}}
+\if{latex}{\out{\hypertarget{method-PipeOpFDAExtract-initialize}{}}}
+\subsection{\code{PipeOpFDAExtract$new()}}{
+  Initializes a new instance of this Class.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{PipeOpFDAExtract$new(id = "fda.extract", param_vals = list())}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{id}}{(\code{character(1)})\cr
+Identifier of resulting object, default \code{"fda.extract"}.}
+      \item{\code{param_vals}}{(named \code{list()})\cr
 List of hyperparameter settings, overwriting the hyperparameter settings that would
 otherwise be set during construction. Default \code{list()}.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
-\if{html}{\out{</div>}}
-}
-}
+
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-PipeOpFDAExtract-clone"></a>}}
 \if{latex}{\out{\hypertarget{method-PipeOpFDAExtract-clone}{}}}
-\subsection{Method \code{clone()}}{
-The objects of this class are cloneable with this method.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PipeOpFDAExtract$clone(deep = FALSE)}\if{html}{\out{</div>}}
+\subsection{\code{PipeOpFDAExtract$clone()}}{
+  The objects of this class are cloneable with this method.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{PipeOpFDAExtract$clone(deep = FALSE)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{deep}}{Whether to make a deep clone.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{deep}}{Whether to make a deep clone.}
-}
-\if{html}{\out{</div>}}
-}
-}
 }

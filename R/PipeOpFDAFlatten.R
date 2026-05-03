@@ -1,4 +1,5 @@
-#' @title Flattens Functional Columns
+#' @title Flatten Functional Columns
+#'
 #' @name mlr_pipeops_fda.flatten
 #'
 #' @description
@@ -9,7 +10,7 @@
 #' The parameters are the parameters inherited from [`PipeOpTaskPreprocSimple`][mlr3pipelines::PipeOpTaskPreprocSimple].
 #'
 #' @section Naming:
-#' The new names generally append a `_1`, ...,  to the corresponding column name.
+#' The new names generally append `_1`, `_2`, ... to the corresponding column name.
 #' However this can lead to name clashes with existing columns.
 #' This is solved as follows:
 #' If a column was called `"x"`, the corresponding new columns will
@@ -20,8 +21,9 @@
 #' @examples
 #' task = tsk("fuel")
 #' pop = po("fda.flatten")
-#' task_flat = pop$train(list(task))
-PipeOpFDAFlatten = R6Class("PipeOpFDAFlatten",
+#' task_flat = pop$train(list(task))[[1L]]
+PipeOpFDAFlatten = R6Class(
+  "PipeOpFDAFlatten",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
     #' @description Initializes a new instance of this Class.
@@ -48,18 +50,15 @@ PipeOpFDAFlatten = R6Class("PipeOpFDAFlatten",
       }
       dt = task$data(cols = cols)
 
-      flattened = imap(dt, function(x, nm) {
+      dt_flat = setcbindlist(imap(dt, function(x, nm) {
         if (tf::is_irreg(x)) {
           flat = suppressWarnings(as.matrix(x))
         } else {
           flat = as.matrix(x)
         }
         d = as.data.table(flat)
-        setnames(d, sprintf("%s_%i", nm, seq_len(ncol(flat))))
-      })
-      names(flattened) = NULL # this does not set the data.table names to NULL but the list names
-      # convert to data.table and append names
-      dt_flat = invoke(cbind, .args = flattened)
+        setnames(d, sprintf("%s_%i", nm, seq_col(flat)))
+      }))
       feature_names = names(dt_flat)
 
       if (anyDuplicated(c(task$col_info$id, feature_names))) {

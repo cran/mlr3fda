@@ -1,4 +1,5 @@
 #' @title Linearly Transform the Domain of Functional Data
+#'
 #' @name mlr_pipeops_fda.scalerange
 #'
 #' @description
@@ -11,9 +12,9 @@
 #' The parameters are the parameters inherited from [`PipeOpTaskPreproc`][mlr3pipelines::PipeOpTaskPreproc],
 #' as well as the following parameters:
 #' * `lower` :: `numeric(1)`\cr
-#' Target value of smallest item of input data. Initialized to `0`.
+#'   Target value of smallest item of input data. Initialized to `0`.
 #' * `upper` :: `numeric(1)`\cr
-#' Target value of greatest item of input data. Initialized to `1`.
+#'   Target value of greatest item of input data. Initialized to `1`.
 #'
 #' @export
 #' @examples
@@ -21,7 +22,8 @@
 #' po_scale = po("fda.scalerange", lower = -1, upper = 1)
 #' task_scale = po_scale$train(list(task))[[1L]]
 #' task_scale$data()
-PipeOpFDAScaleRange = R6Class("PipeOpFDAScaleRange",
+PipeOpFDAScaleRange = R6Class(
+  "PipeOpFDAScaleRange",
   inherit = PipeOpTaskPreproc,
   public = list(
     #' @description Initializes a new instance of this Class.
@@ -42,7 +44,7 @@ PipeOpFDAScaleRange = R6Class("PipeOpFDAScaleRange",
         param_set = param_set,
         param_vals = param_vals,
         packages = c("mlr3fda", "mlr3pipelines", "tf"),
-        feature_types = c("tfd_irreg", "tfd_reg"),
+        feature_types = c("tfd_reg", "tfd_irreg"),
         tags = "fda"
       )
     }
@@ -62,7 +64,7 @@ PipeOpFDAScaleRange = R6Class("PipeOpFDAScaleRange",
         if (tf::is_reg(x)) {
           new_args = offset + args * scale
         } else {
-          new_args = map(args, function(arg) offset + arg * scale)
+          new_args = map(args, \(arg) offset + arg * scale)
         }
         set(dt, j = j, value = invoke(tf::tfd, data = tf::tf_evaluations(x), arg = new_args))
       }
@@ -80,7 +82,7 @@ PipeOpFDAScaleRange = R6Class("PipeOpFDAScaleRange",
         if (tf::is_reg(x)) {
           new_args = trafo$offset + args * trafo$scale
         } else {
-          new_args = map(args, function(arg) trafo$offset + arg * trafo$scale)
+          new_args = map(args, \(arg) trafo$offset + arg * trafo$scale)
         }
         set(dt, j = j, value = invoke(tf::tfd, data = tf::tf_evaluations(x), arg = new_args))
       }

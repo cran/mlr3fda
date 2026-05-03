@@ -1,4 +1,5 @@
 #' @title Time Series Feature Extraction
+#'
 #' @name mlr_pipeops_fda.tsfeats
 #'
 #' @description
@@ -10,22 +11,22 @@
 #' The parameters are the parameters inherited from [`PipeOpTaskPreprocSimple`][mlr3pipelines::PipeOpTaskPreprocSimple],
 #' as well as the following parameters:
 #' * `features` :: `character()`\cr
-#' Function names which return numeric vectors of features.
-#' All features returned by these functions must be named if they return more than one feature.
-#' Default is `c("frequency", "stl_features", "entropy", "acf_features")`.
+#'   Function names which return numeric vectors of features.
+#'   All features returned by these functions must be named if they return more than one feature.
+#'   Default is `c("frequency", "stl_features", "entropy", "acf_features")`.
 #' * `scale` :: `logical(1)`\cr
-#' If `TRUE`, data is scaled to mean 0 and sd 1 before features are computed. Default is `TRUE`.
+#'   If `TRUE`, data is scaled to mean 0 and sd 1 before features are computed. Default is `TRUE`.
 #' * `trim` :: `logical(1)`\cr
-#' If `TRUE`, data is trimmed by `trim_amount` before features are computed.
-#' Values larger than `trim_amount` in absolute value are set to `NA`. Default is `FALSE`.
+#'   If `TRUE`, data is trimmed by `trim_amount` before features are computed.
+#'   Values larger than `trim_amount` in absolute value are set to `NA`. Default is `FALSE`.
 #' * `trim_amount` :: `numeric(1)`\cr
-#' Default level of trimming. Default is `0.1`.
+#'   Default level of trimming. Default is `0.1`.
 #' * `parallel` :: `logical(1)`\cr
-#' If `TRUE`, the features are computed in parallel. Default is `FALSE`.
+#'   If `TRUE`, the features are computed in parallel. Default is `FALSE`.
 #' * `multiprocess` :: `any`\cr
-#' The function from the future package to use for parallel processing. Default is [future::multisession()].
+#'   The function from the future package to use for parallel processing. Default is [future::multisession()].
 #' * `na.action` :: `any`\cr
-#' A function to handle missing values. Default is [stats::na.pass()].
+#'   A function to handle missing values. Default is [stats::na.pass()].
 #'
 #' @section Naming:
 #' The new names generally append a `_{feature}` to the corresponding column name.
@@ -38,12 +39,13 @@
 #' po_tsfeats = po("fda.tsfeats")
 #' task_tsfeats = po_tsfeats$train(list(task))[[1L]]
 #' task_tsfeats$data()
-PipeOpFDATsfeatures = R6Class("PipeOpFDATsfeatures",
+PipeOpFDATsfeatures = R6Class(
+  "PipeOpFDATsfeatures",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
     #' @description Initializes a new instance of this Class.
     #' @param id (`character(1)`)\cr
-    #'   Identifier of resulting object, default is `"fda.tsfeats"`.
+    #'   Identifier of resulting object, default `"fda.tsfeats"`.
     #' @param param_vals (named `list()`)\cr
     #'   List of hyperparameter settings, overwriting the hyperparameter settings that would
     #'   otherwise be set during construction. Default `list()`.
@@ -52,7 +54,7 @@ PipeOpFDATsfeatures = R6Class("PipeOpFDATsfeatures",
         features = p_uty(
           default = c("frequency", "stl_features", "entropy", "acf_features"),
           tags = "train",
-          custom_check = crate(function(x) check_character(x, any.missing = FALSE, min.len = 1L))
+          custom_check = crate(\(x) check_character(x, any.missing = FALSE, min.len = 1L))
         ),
         scale = p_lgl(default = TRUE, tags = c("train", "predict")),
         trim = p_lgl(default = FALSE, tags = c("train", "predict")),

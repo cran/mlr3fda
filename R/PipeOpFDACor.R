@@ -1,4 +1,5 @@
 #' @title Cross-Correlation of Functional Data
+#'
 #' @name mlr_pipeops_fda.cor
 #'
 #' @description
@@ -23,7 +24,8 @@
 #' po_cor = po("fda.cor")
 #' task_cor = po_cor$train(list(task))[[1L]]
 #' task_cor
-PipeOpFDACor = R6Class("PipeOpFDACor",
+PipeOpFDACor = R6Class(
+  "PipeOpFDACor",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
     #' @description Initializes a new instance of this Class.
@@ -53,7 +55,7 @@ PipeOpFDACor = R6Class("PipeOpFDACor",
 
       k = ncol(dt)
       if (k < 2L) {
-        warning_input("task has less than 2 columns")
+        warning_input("task has fewer than 2 columns")
         return(dt)
       }
 

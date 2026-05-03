@@ -1,4 +1,5 @@
 #' @title B-spline Feature Extraction
+#'
 #' @name mlr_pipeops_fda.bsignal
 #'
 #' @description
@@ -10,7 +11,7 @@
 #' The parameters are the parameters inherited from [`PipeOpTaskPreprocSimple`][mlr3pipelines::PipeOpTaskPreprocSimple],
 #' as well as the following parameters:
 #' * `inS` :: `character(1)`\cr
-#'   Type of effect in the covariate index: one of `"smooth"`, `"linear"`, `"constant"`. Default `"smooth"`.
+#'   Type of effect in the covariate index: one of `"smooth"`, `"linear"`, `"constant"`. Default is `"smooth"`.
 #' * `knots` :: `numeric()`\cr
 #'   Either the number of interior knots or a vector of their positions.
 #' * `boundary.knots` :: `numeric(2)`\cr
@@ -41,12 +42,13 @@
 #' po_bsignal = po("fda.bsignal")
 #' task_bsignal = po_bsignal$train(list(task))[[1L]]
 #' task_bsignal$data()
-PipeOpFDABsignal = R6Class("PipeOpFDABsignal",
+PipeOpFDABsignal = R6Class(
+  "PipeOpFDABsignal",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
     #' @description Initializes a new instance of this Class.
     #' @param id (`character(1)`)\cr
-    #'   Identifier of resulting object, default is `"fda.bsignal"`.
+    #'   Identifier of resulting object, default `"fda.bsignal"`.
     #' @param param_vals (named `list()`)\cr
     #'   List of hyperparameter settings, overwriting the hyperparameter settings that would
     #'   otherwise be set during construction. Default `list()`.
@@ -56,13 +58,13 @@ PipeOpFDABsignal = R6Class("PipeOpFDABsignal",
         knots = p_uty(
           default = 10L,
           tags = c("train", "predict"),
-          custom_check = crate(function(x) check_numeric(x, min.len = 1))
+          custom_check = crate(\(x) check_numeric(x, min.len = 1))
         ),
         boundary.knots = p_uty(
           default = NULL,
           special_vals = list(NULL),
           tags = c("train", "predict"),
-          custom_check = crate(function(x) check_numeric(x, len = 2L, null.ok = TRUE))
+          custom_check = crate(\(x) check_numeric(x, len = 2L, null.ok = TRUE))
         ),
         degree = p_int(default = 3L, tags = c("train", "predict")),
         differences = p_int(1L, default = 1L, tags = c("train", "predict")),
@@ -92,10 +94,10 @@ PipeOpFDABsignal = R6Class("PipeOpFDABsignal",
 
       setcbindlist(imap(dt, function(x, nm) {
         x = as.matrix(x)
-        blrn = invoke(FDboost::bsignal, x = x, s = seq_len(ncol(x)), .args = pars)
+        blrn = invoke(FDboost::bsignal, x = x, s = seq_col(x), .args = pars)
         bsignal = mboost::extract(object = blrn, what = "design") # get the design matrix of the base learner
         feats = as.data.table(bsignal)
-        setnames(feats, sprintf("%s_bsig_%i", nm, seq_len(ncol(feats))))
+        setnames(feats, sprintf("%s_bsig_%i", nm, seq_col(feats)))
       }))
     }
   )

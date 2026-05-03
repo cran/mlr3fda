@@ -1,10 +1,10 @@
-test_that("PipeOpCor - basic properties", {
+test_that("PipeOpFDACor - basic properties", {
   pop = po("fda.cor")
   expect_pipeop(pop)
   expect_identical(pop$id, "fda.cor")
 })
 
-test_that("PipeOpCor works", {
+test_that("PipeOpFDACor works", {
   skip_if_not_installed("withr")
   withr::local_seed(1234L)
   dt = data.table(y = 1:100, x1 = tf::tf_rgp(100L), x2 = tf::tf_rgp(100L), x3 = tf::tf_rgp(100L))
@@ -23,7 +23,7 @@ test_that("PipeOpCor works", {
   # single col gives warning
   task$select("x1")
   pop = po("fda.cor")
-  expect_warning(task_cor <- train_pipeop(pop, list(task))[[1L]], "task has less than 2 columns")
+  expect_warning(task_cor <- train_pipeop(pop, list(task))[[1L]], "task has fewer than 2 columns")
   expect_identical(task$data(), task_cor$data())
 
   # different domain throws error

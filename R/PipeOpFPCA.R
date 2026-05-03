@@ -1,4 +1,5 @@
 #' @title Functional Principal Component Analysis
+#'
 #' @name mlr_pipeops_fda.fpca
 #'
 #' @description
@@ -28,12 +29,13 @@
 #' po_fpca = po("fda.fpca", n_components = 3L)
 #' task_fpca = po_fpca$train(list(task))[[1L]]
 #' task_fpca$data()
-PipeOpFPCA = R6Class("PipeOpFPCA",
+PipeOpFPCA = R6Class(
+  "PipeOpFPCA",
   inherit = PipeOpTaskPreproc,
   public = list(
     #' @description Initializes a new instance of this Class.
     #' @param id (`character(1)`)\cr
-    #'   Identifier of resulting object, default is `"fda.fpca"`.
+    #'   Identifier of resulting object, default `"fda.fpca"`.
     #' @param param_vals (named `list()`)\cr
     #'   List of hyperparameter settings, overwriting the hyperparameter settings that would
     #'   otherwise be set during construction. Default `list()`.

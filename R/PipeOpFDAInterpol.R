@@ -1,4 +1,5 @@
 #' @title Interpolate Functional Columns
+#'
 #' @name mlr_pipeops_fda.interpol
 #'
 #' @description
@@ -17,7 +18,7 @@
 #'   * `"union"`: This option creates a grid based on the union of all argument points from the provided functional
 #'     features. This means that if the argument points across features are \(t_1, t_2, ..., t_n\), then the grid will
 #'     be the combined unique set of these points. This option is generally used when the argument points vary across
-#'     observations and a  common grid is needed for comparison or further analysis.
+#'     observations and a common grid is needed for comparison or further analysis.
 #'   * `"intersect"`: Creates a grid using the intersection of all argument points of a feature.
 #'     This grid includes only those points that are common across all functional features,
 #'     facilitating direct comparison on a shared set of points.
@@ -27,15 +28,17 @@
 #'   Note: For regular functional data this has no effect as all argument points are the same.
 #'   Initial value is `"union"`.
 #' * `method` :: `character(1)`\cr
-#'   Defaults to `"linear"`. One of:
+#'   One of:
 #'   * `"linear"`: applies linear interpolation without extrapolation (see [tf::tf_approx_linear()]).
 #'   * `"spline"`: applies cubic spline interpolation (see [tf::tf_approx_spline()]).
 #'   * `"fill_extend"`: applies linear interpolation with constant extrapolation (see [tf::tf_approx_fill_extend()]).
 #'   * `"locf"`: applies "last observation carried forward" interpolation (see [tf::tf_approx_locf()]).
 #'   * `"nocb"`: applies "next observation carried backward" interpolation (see [tf::tf_approx_nocb()]).
+#'
+#'   Default is `"linear"`.
 #' * `left` :: `numeric()`\cr
 #'   The left boundary of the window.
-#'   The window is specified such that the all values >=left and <=right are kept for the computations.
+#'   The window is specified such that all values >=left and <=right are kept for the computations.
 #' * `right` :: `numeric()`\cr
 #'   The right boundary of the window.
 #'
@@ -45,7 +48,8 @@
 #' pop = po("fda.interpol")
 #' task_interpol = pop$train(list(task))[[1L]]
 #' task_interpol$data()
-PipeOpFDAInterpol = R6Class("PipeOpFDAInterpol",
+PipeOpFDAInterpol = R6Class(
+  "PipeOpFDAInterpol",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
     #' @description Initializes a new instance of this Class.
@@ -56,17 +60,22 @@ PipeOpFDAInterpol = R6Class("PipeOpFDAInterpol",
     #'   otherwise be set during construction. Default `list()`.
     initialize = function(id = "fda.interpol", param_vals = list()) {
       param_set = ps(
-        grid = p_uty(tags = c("train", "predict", "required"), custom_check = crate(function(x) {
-          if (test_string(x)) {
-            return(check_choice(x, choices = c("union", "intersect", "minmax")))
-          }
-          if (test_numeric(x, any.missing = FALSE, min.len = 1L)) {
-            return(TRUE)
-          }
-          "Must be either a string or numeric vector"
-        })),
+        grid = p_uty(
+          tags = c("train", "predict", "required"),
+          custom_check = crate(function(x) {
+            if (test_string(x)) {
+              return(check_choice(x, choices = c("union", "intersect", "minmax")))
+            }
+            if (test_numeric(x, any.missing = FALSE, min.len = 1L)) {
+              return(TRUE)
+            }
+            "Must be either a string or numeric vector"
+          })
+        ),
         method = p_fct(
-          c("linear", "spline", "fill_extend", "locf", "nocb"), default = "linear", tags = c("train", "predict")
+          c("linear", "spline", "fill_extend", "locf", "nocb"),
+          default = "linear",
+          tags = c("train", "predict")
         ),
         left = p_dbl(tags = c("train", "predict")),
         right = p_dbl(tags = c("train", "predict"))
@@ -133,7 +142,7 @@ PipeOpFDAInterpol = R6Class("PipeOpFDAInterpol",
             intersect = Reduce(intersect, arg),
             minmax = {
               lower = max(map_dbl(arg, 1L))
-              upper = min(map_dbl(arg, function(arg) arg[[length(arg)]]))
+              upper = min(map_dbl(arg, \(arg) arg[[length(arg)]]))
               arg = sort(unique(unlist(arg, recursive = FALSE, use.names = FALSE)))
               arg[seq(which(lower == arg), which(upper == arg))]
             }

@@ -1,4 +1,5 @@
-#' @title Fast Fourier transform features
+#' @title Fast Fourier Transform Features
+#'
 #' @name mlr_pipeops_fda.fourier
 #'
 #' @description
@@ -21,12 +22,13 @@
 #' po_fourier = po("fda.fourier")
 #' task_fourier = po_fourier$train(list(task))[[1L]]
 #' task_fourier$data()
-PipeOpFDAFourier = R6Class("PipeOpFDAFourier",
+PipeOpFDAFourier = R6Class(
+  "PipeOpFDAFourier",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
     #' @description Initializes a new instance of this Class.
     #' @param id (`character(1)`)\cr
-    #'   Identifier of resulting object, default is `"fda.fourier"`.
+    #'   Identifier of resulting object, default `"fda.fourier"`.
     #' @param param_vals (named `list()`)\cr
     #'   List of hyperparameter settings, overwriting the hyperparameter settings that would
     #'   otherwise be set during construction. Default `list()`.
@@ -77,7 +79,7 @@ PipeOpFDAFourier = R6Class("PipeOpFDAFourier",
           )
           as.data.table(t(res))
         })
-        setnames(fft_coeff, sprintf("%s_fft_%s_%i", nm, type, seq_len(ncol(fft_coeff))))
+        setnames(fft_coeff, sprintf("%s_fft_%s_%i", nm, type, seq_col(fft_coeff)))
       }))
     }
   )

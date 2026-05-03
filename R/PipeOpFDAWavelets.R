@@ -1,4 +1,5 @@
-#' @title Discrete Wavelet transform features
+#' @title Discrete Wavelet Transform Features
+#'
 #' @name mlr_pipeops_fda.wavelets
 #'
 #' @description
@@ -11,8 +12,8 @@
 #' * `filter` :: `character(1)` | `numeric()` | [wavelets::wt.filter()]\cr
 #'   Specifies which filter should be used. Must be either [wavelets::wt.filter()] object, an even numeric vector or a
 #'   string. In case of a string must be one of `"d"`|`"la"`|`"bl"`|`"c"` followed by an even number for the level of
-#'   the filter. The level of the filter needs to be smaller or equal then the time-series length.
-#'   For more information and acceptable filters see `help(wt.filter)`. Defaults to `"la8"`.
+#'   the filter. The level of the filter needs to be smaller or equal than the time-series length.
+#'   For more information and acceptable filters see `help(wt.filter)`. Default is `"la8"`.
 #' * `n.levels` :: `integer(1)`\cr
 #'   An integer specifying the level of the decomposition.
 #' * `boundary` :: `character(1)`\cr
@@ -20,25 +21,29 @@
 #'   its length. Default is `"periodic"`.
 #' * `fast` :: `logical(1)`\cr
 #'   Should the pyramid algorithm be calculated with an internal C function? Default is `TRUE`.
+#'
 #' @export
 #' @examples
 #' task = tsk("fuel")
 #' po_wavelets = po("fda.wavelets")
 #' task_wavelets = po_wavelets$train(list(task))[[1L]]
 #' task_wavelets$data()
-PipeOpFDAWavelets = R6Class("PipeOpFDAWavelets",
+PipeOpFDAWavelets = R6Class(
+  "PipeOpFDAWavelets",
   inherit = PipeOpTaskPreprocSimple,
   public = list(
     #' @description Initializes a new instance of this Class.
     #' @param id (`character(1)`)\cr
-    #'   Identifier of resulting object, default is `"fda.wavelets"`.
+    #'   Identifier of resulting object, default `"fda.wavelets"`.
     #' @param param_vals (named `list()`)\cr
     #'   List of hyperparameter settings, overwriting the hyperparameter settings that would
     #'   otherwise be set during construction. Default `list()`.
     initialize = function(id = "fda.wavelets", param_vals = list()) {
       param_set = ps(
         filter = p_uty(
-          default = "la8", tags = c("train", "predict"), custom_check = crate(function(x) {
+          default = "la8",
+          tags = c("train", "predict"),
+          custom_check = crate(function(x) {
             if (test_class(x, "wt.filter")) {
               return(TRUE)
             }
@@ -89,7 +94,7 @@ PipeOpFDAWavelets = R6Class("PipeOpFDAWavelets",
           },
           .fill = TRUE
         )
-        setnames(feats, sprintf("%s_wav_%s_%i", nm, filter, seq_len(ncol(feats))))
+        setnames(feats, sprintf("%s_wav_%s_%i", nm, filter, seq_col(feats)))
       }))
     }
   )
