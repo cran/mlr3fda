@@ -1,3 +1,11 @@
+# mlr3fda 0.7.0
+
+* fix: `PipeOpFDAWavelets` no longer errors when `filter` is a `wt.filter` object or a numeric vector. Generated columns are now named `<column>_wav_<i>` regardless of the filter.
+* fix: `PipeOpFDAZoom` now accepts a one-sided `begin` or `end` instead of requiring both.
+* fix: `as.data.table(mlr_pipeops)` no longer errors with `object 'value' not found` when `mlr3fda` is loaded.
+* feat: New `PipeOpFDACatch22` for extracting the catch22 time series features from functional columns via `Rcatch22::catch22_all()`.
+* feat: New `PipeOpFDAIntegrate` for extracting the definite integral of functional columns via `tf::tf_integrate()`.
+
 # mlr3fda 0.6.0
 
 * fix: Add `mlr3fda` to `mlr_reflections$loaded_packages` to fix errors when using `mlr3fda` in parallel.
