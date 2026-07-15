@@ -1,6 +1,6 @@
 Package: mlr3fda
 Title: Extending 'mlr3' to Functional Data Analysis
-Version: 0.7.0
+Version: 0.7.1
 Authors@R: c(
     person("Maximilian", "Mücke", , "muecke.maximilian@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0009-0000-9432-9795")),
@@ -43,7 +43,7 @@ Collate: 'zzz.R' 'PipeOpFDABsignal.R' 'PipeOpFDACatch22.R'
         'PipeOpFPCA.R' 'TaskClassif_phoneme.R' 'TaskRegr_dti.R'
         'TaskRegr_fuel.R' 'bibentries.R' 'datasets.R' 'hash_input.R'
 NeedsCompilation: no
-Packaged: 2026-07-02 14:54:49 UTC; mmuecke
+Packaged: 2026-07-15 17:17:11 UTC; mmuecke
 Author: Maximilian Mücke [aut, cre] (ORCID:
     <https://orcid.org/0009-0000-9432-9795>),
   Sebastian Fischer [aut] (ORCID:
@@ -52,4 +52,4 @@ Author: Maximilian Mücke [aut, cre] (ORCID:
   Bernd Bischl [ctb] (ORCID: <https://orcid.org/0000-0001-6002-6980>)
 Maintainer: Maximilian Mücke <muecke.maximilian@gmail.com>
 Repository: CRAN
-Date/Publication: 2026-07-02 15:50:02 UTC
+Date/Publication: 2026-07-15 18:20:02 UTC

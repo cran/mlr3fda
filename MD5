@@ -1,6 +1,6 @@
-4f44f5e250d3e8b5aa6edf0d4bf3f081 *DESCRIPTION
+04903be8ee499d8eaad971ed18447038 *DESCRIPTION
 6544f73b347aab2236c5e7904e50e41b *NAMESPACE
-022fcc2966d32ecc90579c01891c15ec *NEWS.md
+c7c710f71ebaef36d8b68f58f2c75f24 *NEWS.md
 eee430e849f391825256c2e4f2186032 *R/PipeOpFDABsignal.R
 d85d4e37bb0fdc22c8587631f6164546 *R/PipeOpFDACatch22.R
 73590fd62f5aae3a9adda397dab330d8 *R/PipeOpFDACor.R
@@ -26,7 +26,7 @@ f28d56d1ae81468aa9b77c04716b1bf7 *R/bibentries.R
 32d5c55aebe20b57dccffb6282a08b05 *R/datasets.R
 aac55aa270f23b1b7cea617d641001c4 *R/hash_input.R
 70354865297147a301d8e23e9d11ee09 *R/zzz.R
-ab0461fe6a5212ca06821fb16935790d *README.md
+4a1e7e459e3477b6121af2922d65bdde *README.md
 21c9401b8c07f38d762ade4612fc4ffe *build/partial.rdb
 2072fbd7804a7f269516c0b2246f0a84 *data/dti.rda
 90f19722142877142594398651fcdbf1 *data/fuel.rda
@@ -64,14 +64,14 @@ daa961d1745da4077b03b1a23bec4593 *man/phoneme.Rd
 410fd3c30eada5ed7cf04041f131788c *tests/testthat/helper.R
 f96b4c8d08c31eaf88403817b8143260 *tests/testthat/test_PipeOpFDABsignal.R
 699a5629e930dca54b67c4c955d83c63 *tests/testthat/test_PipeOpFDACatch22.R
-664bd88f9e74f7faf934ba6d77fe0c3b *tests/testthat/test_PipeOpFDACor.R
+c678a83ac784caca6ab894cef6636fd7 *tests/testthat/test_PipeOpFDACor.R
 7dbac98c0436c5b90d96b6ce0e12c62a *tests/testthat/test_PipeOpFDADepth.R
 4a3b9c951cd9e887cc3a49acbdd8a852 *tests/testthat/test_PipeOpFDADerive.R
 fa8703886c3a3077c523ce813a4b7307 *tests/testthat/test_PipeOpFDAExtract.R
 3d13c7bd7a8082e772d157ed35005745 *tests/testthat/test_PipeOpFDAFlatten.R
 78d3937466aa588b6199f4fd76c9155f *tests/testthat/test_PipeOpFDAFourier.R
 ab09cfeb33ffd2667d5d0440a9d6ead4 *tests/testthat/test_PipeOpFDAIntegrate.R
-2c356f4f0ef6d92a9616e5f0dcfda269 *tests/testthat/test_PipeOpFDAInterpol.R
+f77c857e2dc0da572b327b942bb1b21f *tests/testthat/test_PipeOpFDAInterpol.R
 58b0b4fe97cc5ba84008e1b48c65750b *tests/testthat/test_PipeOpFDARandomEffect.R
 68802795fbbf58791ae29d75d2ececd9 *tests/testthat/test_PipeOpFDARegister.R
 b4e455baf53dda17984312afa9e5bf3c *tests/testthat/test_PipeOpFDAScaleRange.R
@@ -84,5 +84,5 @@ fe3070764a0db9c4deb9090e1adc55a2 *tests/testthat/test_PipeOpFPCA.R
 5c73a67f8ad8411430bc8929ee2ae017 *tests/testthat/test_TaskRegr_dti.R
 bd617d707bc589a194445ca310efe027 *tests/testthat/test_TaskRegr_fuel.R
 f72c754ce9d6b80ae5930dcb98a47465 *tests/testthat/test_hash_input.R
-a5ed0f0b799e647bf38e1f41dbeb2d84 *tests/testthat/test_tf.R
+cdee798eda9bb4a6e05dbab9fc2f93c1 *tests/testthat/test_tf.R
 8eb4dc123f88f385d6c6fd62321538be *tests/testthat/test_zzz.R
